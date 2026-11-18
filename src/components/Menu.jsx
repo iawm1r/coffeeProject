@@ -33,10 +33,10 @@ const Menu = () => {
               </div>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
                 {cartItems?.find((cartItem) => cartItem.id === item.id) ? (
-                   <div className="flex items-center gap-4 bg-cream rounded-full px-5 py-2 shadow-md">
+                   <div className="flex items-center gap-4  px-5 py-2">
                     <button
                       onClick={() => addToCart(item.id)}
-                      className="text-xl font-bold"
+                       className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
                     >
                       +
                     </button>
@@ -48,7 +48,7 @@ const Menu = () => {
                     </span>
                     <button
                       onClick={() => removeFromCart(item.id)}
-                      className="text-xl font-bold"
+                       className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
                     >
                       -
                     </button>
