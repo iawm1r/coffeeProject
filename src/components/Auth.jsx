@@ -56,7 +56,7 @@ const Auth = () => {
           </Link>
           <div className="mt-8 text-right">
             <h2 className="text-3xl font-bold text-[#4b2e24]">
-              {isLogin ? "به خانواده ما بپیوندید" : "خوش برگشتی !"}
+              {isLogin ? "خوش برگشتی !" : "به خانواده ما بپیوندید"}
             </h2>
             <p className="text-gray-500 mt-3 text-sm">
               {isLogin
