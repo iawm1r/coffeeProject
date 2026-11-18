@@ -166,10 +166,10 @@ const Auth = () => {
             {isLogin ? "حساب کابری نداری؟" : "قبلا ثبت نام کردی؟"}
             <button
               type="button"
-              onClick={() => navigation(isLogin ? "/login" : "signup")}
+              onClick={() => navigation(isLogin ? "/signup" : "/login")}
               className="text-yellow-600 font-bold mr-2"
             >
-              {isLogin ? "وارد شو" : "ثبت نام کن"}
+              {isLogin ? "ثبت نام کن" : "وارد شو"}
             </button>
           </p>
         </div>
