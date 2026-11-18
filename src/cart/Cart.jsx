@@ -28,7 +28,7 @@ const Cart = () => {
                     <img
                       src={p.image}
                       alt={p.name}
-                      className="w-full object-contain"
+                      className="w-full  h-[200px]"
                     />
 
                     <div className="relative bg-light shadow-lg pb-8 ">
