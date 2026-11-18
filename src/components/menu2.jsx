@@ -3,7 +3,7 @@ import "../Menu.css";
 import { useContext } from "react";
 import { ShopContext } from "../context/CartContext";
 import CoffeMenu from "../data/data";
-import menubg from "../assets/image/menubg.png"
+import menubg from "../assets/image/menubg.png";
 const categories = [
   { id: "all", title: "همه موارد", icon: "▦" },
   { id: "coffee", title: "قهوه‌ها", icon: "☕" },
@@ -14,20 +14,12 @@ const categories = [
 
 const Menu2 = () => {
   const [activeCategory, setActiveCategory] = useState("all");
-  const [, addToCart] = useContext(ShopContext);
+  const [cartItems, addToCart, removeFromCart] = useContext(ShopContext);
 
   const filteredProducts =
     activeCategory === "all"
       ? CoffeMenu
       : CoffeMenu.filter((product) => product.category === activeCategory);
-
-  const handelAddToCart = (product) => {
-    if (addToCart) {
-      addToCart(product.id);
-    } else {
-      alert("سبد خرید هنوز متصل نشده است.");
-    }
-  };
 
   return (
     <div className="menu-page" dir="rtl">
@@ -87,12 +79,39 @@ const Menu2 = () => {
                       <strong>
                         {product.price.toLocaleString("fa-IR")} تومان
                       </strong>
-                      <button
-                        className="add-cart-btn"
-                        onClick={() => handelAddToCart(product)}
-                      >
-                        افزودن به سبد 🛒
-                      </button>
+
+                      {cartItems?.find(
+                        (cartItem) => cartItem.id === product.id,
+                      ) ? (
+                        <div className="flex items-center gap-4 mt-4">
+                          <button
+                            onClick={() => addToCart(product.id)}
+                            className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
+                          >
+                            +
+                          </button>
+                          <span className="font-bold text-lg">
+                            {
+                              cartItems.find(
+                                (cartItem) => cartItem.id === product.id,
+                              ).count
+                            }
+                          </span>
+                          <button
+                            onClick={() => removeFromCart(product.id)}
+                            className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
+                          >
+                            -
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          className="add-cart-btn"
+                          onClick={() => addToCart(product.id)}
+                        >
+                          افزودن به سبد 🛒
+                        </button>
+                      )}
                     </div>
                   </div>
                 );

@@ -3,7 +3,7 @@ import { ShopContext } from "../context/CartContext";
 import { useContext } from "react";
 
 const Menu = () => {
-  const [, addToCart] = useContext(ShopContext);
+  const [cartItems, addToCart, removeFromCart] = useContext(ShopContext);
   return (
     <div className="my-20 p-5 max-w-6xl mx-auto" id="menu">
       <div className="text-center mb-10">
@@ -31,13 +31,37 @@ const Menu = () => {
                   {item.price.toLocaleString()} تومان
                 </p>
               </div>
-
-              <button
-                onClick={() => addToCart(item.id)}
-                className="absolute bottom-0 transform translate-x-1/2 translate-y-1/2 bg-cream text-black rounded-full px-6 py-2 "
-              >
-                سفارش{" "}
-              </button>
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+                {cartItems?.find((cartItem) => cartItem.id === item.id) ? (
+                   <div className="flex items-center gap-4 bg-cream rounded-full px-5 py-2 shadow-md">
+                    <button
+                      onClick={() => addToCart(item.id)}
+                      className="text-xl font-bold"
+                    >
+                      +
+                    </button>
+                    <span className="font-bold text-lg">
+                      {
+                        cartItems.find((cartitem) => cartitem.id === item.id)
+                          .count
+                      }
+                    </span>
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-xl font-bold"
+                    >
+                      -
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => addToCart(item.id)}
+                    className="bg-cream text-black rounded-full px-6 py-2 shadow-md"
+                  >
+                    سفارش
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}
