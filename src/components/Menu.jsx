@@ -1,9 +1,11 @@
 import CoffeeMenu from "../data/data";
 import { ShopContext } from "../context/CartContext";
 import { useContext } from "react";
-
+import { useSearchParams } from "react-router-dom";
 const Menu = () => {
   const [cartItems, addToCart, removeFromCart] = useContext(ShopContext);
+  const [serachParams] = useSearchParams();
+  const searchTerm = serachParams.get("search") || "";
   return (
     <div className="my-20 p-5 max-w-6xl mx-auto" id="menu">
       <div className="text-center mb-10">
@@ -16,9 +18,13 @@ const Menu = () => {
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 ">
-        {CoffeeMenu.filter((item) => item.id <= 4).map((item) => {
+        {CoffeeMenu.filter((item) => {
+          const matcheId = item.id <= 4
+          const matchedSearch = item.name.toLowerCase().includes(searchTerm.trim().toLocaleLowerCase())
+          return matcheId && matchedSearch
+        }).map((item) => {
           return (
-            <div key={item.id} className="relative bg-light shadow-lg pb-8 ">
+            <div key={item.id}   id={`product-${item.id}`} className="relative bg-light shadow-lg pb-8 ">
               <img
                 src={item.image}
                 alt={item.name}
@@ -33,10 +39,10 @@ const Menu = () => {
               </div>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
                 {cartItems?.find((cartItem) => cartItem.id === item.id) ? (
-                   <div className="flex items-center gap-4  px-5 py-2">
+                  <div className="flex items-center gap-4  px-5 py-2">
                     <button
                       onClick={() => addToCart(item.id)}
-                       className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
+                      className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
                     >
                       +
                     </button>
@@ -48,7 +54,7 @@ const Menu = () => {
                     </span>
                     <button
                       onClick={() => removeFromCart(item.id)}
-                       className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
+                      className="bg-cream rounded-full w-9 h-9 text-xl font-bold"
                     >
                       -
                     </button>

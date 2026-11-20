@@ -214,6 +214,7 @@
   text-align: right;
   cursor: pointer;
   transition: 0.3s;
+  margin-top: 10px;
 }
 
 .sidebar-btn span {

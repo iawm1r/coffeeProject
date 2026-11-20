@@ -4,9 +4,26 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { ShopContext } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { IoSearchOutline } from "react-icons/io5";
+import CoffeeMenu from "../data/data";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartItems] = useContext(ShopContext);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const filteredProducts = CoffeeMenu.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.trim().toLowerCase()),
+  ).slice(0, 5);
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+
+    setSearchTerm(value);
+    setShowSuggestions(true);
+  };
+
   const toggleIcones = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -83,7 +100,65 @@ const Header = () => {
               </li>
             </ul>
           </div>
+          <div className="relative w-[340px]">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="flex items-center w-[200px] sm:w-[300px] md:w-full mr-2 h-[42px] bg-white/85 border border-white/50 rounded-full px-3"
+            >
+              <input
+                type="text"
+                placeholder="دنبال چی میگردی؟"
+                value={searchTerm}
+                onChange={handleSearch}
+                onFocus={() => setShowSuggestions(true)}
+                className="w-full bg-transparent outline-none border-none text-[#3c2113] text-[13px] text-right"
+              />
 
+              <button type="submit">
+                <IoSearchOutline />
+              </button>
+            </form>
+
+            {showSuggestions && searchTerm.trim() && (
+              <div className="absolute top-full mt-3 w-full bg-white text-gray-900 rounded-xl shadow-xl overflow-hidden z-50">
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((item) => (
+                    <Link
+                      key={item.id}
+                      to={
+                        item.id <= 4
+                          ? `/?search=${encodeURIComponent(item.name)}`
+                          : `/menu?search=${encodeURIComponent(item.name)}`
+                      }
+                      onClick={() => {
+                        setShowSuggestions(false);
+                        setSearchTerm(item.name);
+                      }}
+                      className="flex items-center gap-3 p-3 hover:bg-gray-100 transition-colors border-b border-gray-100"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-14 h-14 object-cover rounded-lg"
+                      />
+
+                      <div className="flex flex-col gap-1">
+                        <span className="font-bold text-sm">{item.name}</span>
+
+                        <span className="text-xs text-gray-500">
+                          {item.price.toLocaleString("fa-IR")} تومان
+                        </span>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="text-center text-sm text-gray-500 p-5">
+                    محصولی با این نام پیدا نشد!
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <Link
               to="/signup"
@@ -155,7 +230,9 @@ const Header = () => {
                   </Link>
                 </li>
                 <li className="bg-cream block w-full  py-2 hover:bg-gray-300 transition-all duration-500">
-                  <Link to="/#connect" onClick={()=>setIsMenuOpen(false)}>ارتباط با ما</Link>
+                  <Link to="/#connect" onClick={() => setIsMenuOpen(false)}>
+                    ارتباط با ما
+                  </Link>
                 </li>
               </ul>
             </div>
